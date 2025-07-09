@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: "{{ .Values.helloworld.podName }}"
+  name: "{{ .Values.helloworld.podName }}"
+spec:
+  ports:
+  - port: {{ .Values.helloworld.servicePort }}
+    protocol: TCP
+    targetPort: {{ .Values.helloworld.port }}
+  selector:
+    app: "{{ .Values.helloworld.podName }}"
+  type: "{{ .Values.helloworld.serviceType }}"
+status:
+  loadBalancer: {}
