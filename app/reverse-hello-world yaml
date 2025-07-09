@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: "{{ .Values.reversehelloworld.podName }}"
+  name: "{{ .Values.reversehelloworld.podName }}"
+spec:
+  replicas: {{ .Values.replicaCount  }}
+  selector:
+    matchLabels:
+      app: "{{ .Values.reversehelloworld.podName }}"
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: "{{ .Values.reversehelloworld.podName }}"
+    spec:
+      containers:
+      - image: "{{ .Values.reversehelloworld.image }}:{{ .Values.reversehelloworld.tag | default .Chart.AppVersion }}"
+        name: reverse-hello-world
+        ports: 
+        - containerPort: {{ .Values.reversehelloworld.port }}
+        imagePullPolicy: "{{ .Values.reversehelloworld.pullPolicy }}"
+        resources: 
+          {{- toYaml .Values.reversehelloworld.resources | nindent 12 }}
+status: {}
