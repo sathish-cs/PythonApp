@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: "{{ .Values.helloworld.podName }}"
+  name: "{{ .Values.helloworld.podName }}"
+spec:
+  replicas: {{ .Values.replicaCount  }}
+  selector:
+    matchLabels:
+      app: "{{ .Values.helloworld.podName }}"
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels: 
+        app: "{{ .Values.helloworld.podName }}"
+    spec:
+      containers:
+      - image: "{{ .Values.helloworld.image }}:{{ .Values.helloworld.tag | default .Chart.AppVersion }}"
+        imagePullPolicy: "{{ .Values.helloworld.pullPolicy }}"
+        name: hello-world
+        ports: 
+        - containerPort: {{ .Values.helloworld.port }}
+        resources: 
+          {{- toYaml .Values.helloworld.resources | nindent 12 }}
+status: {}
