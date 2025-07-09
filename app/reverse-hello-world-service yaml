@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: "{{ .Values.reversehelloworld.podName }}"
+  name: "{{ .Values.reversehelloworld.podName }}"
+spec:
+  ports:
+  - port: {{ .Values.reversehelloworld.servicePort }}
+    protocol: TCP
+    targetPort: {{ .Values.reversehelloworld.port }}
+  selector:
+    app: "{{ .Values.reversehelloworld.podName }}"
+  type: "{{ .Values.reversehelloworld.serviceType }}"
+status:
+  loadBalancer: {}
