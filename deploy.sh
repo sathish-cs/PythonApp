@@ -131,6 +131,6 @@ sleep 30s
 
 # Curl the response
 echo "Get response from hello-world app"
-curl kubectl run -it --rm --image=busybox dns-test --restart=Never --  wget -S hello-world.hello-world.svc.cluster.local
+ kubectl run -it --rm --image=busybox dns-test --restart=Never --  wget -S hello-world.hello-world.svc.cluster.local
 echo "Get response from reverse app"
-curl kubectl run -it --rm --image=busybox dns-test --restart=Never --  wget -S reverse-hello-world.hello-world.svc.cluster.local 
+ kubectl run -it --rm --image=busybox dns-test --restart=Never --  wget -S reverse-hello-world.hello-world.svc.cluster.local 
