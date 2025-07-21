@@ -22,7 +22,7 @@ spec:
         imagePullPolicy: "{{ .Values.helloworld.pullPolicy }}"
         name: hello-world
         ports: 
-        - containerPort: {{ .Values.helloworld.port }}
+        - containerPort: {{ .Values.helloworld.servicePort }}
         resources: 
           {{- toYaml .Values.helloworld.resources | nindent 12 }}
 status: {}
