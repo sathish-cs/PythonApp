@@ -7,9 +7,9 @@ metadata:
   name: "{{ .Values.helloworld.podName }}"
 spec:
   ports:
-  - port: {{ .Values.helloworld.servicePort }}
+  - port: {{ .Values.helloworld.port }}
     protocol: TCP
-    targetPort: {{ .Values.helloworld.port }}
+    targetPort: {{ .Values.helloworld.servicePort }}
   selector:
     app: "{{ .Values.helloworld.podName }}"
   type: "{{ .Values.helloworld.serviceType }}"
