@@ -11,7 +11,7 @@ helloworld:
   serviceType: ClusterIP
   servicePort: 5000
   image: dockxam/python-app
-  port: 5000
+  port: 80
   pullPolicy: IfNotPresent
   tag: v2
   resources:
@@ -27,7 +27,7 @@ reversehelloworld:
   serviceType: ClusterIP
   servicePort: 8000
   image: dockxam/reverse-python-app
-  port: 8000
+  port: 80
   pullPolicy: IfNotPresent
   tag: v4
   resources:
