@@ -21,7 +21,7 @@ spec:
       - image: "{{ .Values.reversehelloworld.image }}:{{ .Values.reversehelloworld.tag | default .Chart.AppVersion }}"
         name: reverse-hello-world
         ports: 
-        - containerPort: {{ .Values.reversehelloworld.port }}
+        - containerPort: {{ .Values.reversehelloworld.servicePort }}
         imagePullPolicy: "{{ .Values.reversehelloworld.pullPolicy }}"
         resources: 
           {{- toYaml .Values.reversehelloworld.resources | nindent 12 }}
