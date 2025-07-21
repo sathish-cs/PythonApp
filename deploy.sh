@@ -31,12 +31,10 @@ install_kubectl() {
 
   echo "Adding Kubernetes GPG key"
   sudo mkdir -p /etc/apt/keyrings
-  curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
-    sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+  curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | gpg --dearmor | sudo tee /etc/apt/keyrings/kubernetes-apt-keyring.gpg > /dev/null
 
-  echo "[STEP] Adding Kubernetes repository..."
-  echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | \
-    sudo tee /etc/apt/sources.list.d/kubernetes.list
+  echo "Adding Kubernetes repository"
+  echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
   sudo apt-get update
   sudo apt-get install -y kubelet kubeadm kubectl
