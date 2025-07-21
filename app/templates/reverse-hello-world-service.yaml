@@ -7,9 +7,9 @@ metadata:
   name: "{{ .Values.reversehelloworld.podName }}"
 spec:
   ports:
-  - port: {{ .Values.reversehelloworld.servicePort }}
+  - port: {{ .Values.reversehelloworld.port }}
     protocol: TCP
-    targetPort: {{ .Values.reversehelloworld.port }}
+    targetPort: {{ .Values.reversehelloworld.servicePort }}
   selector:
     app: "{{ .Values.reversehelloworld.podName }}"
   type: "{{ .Values.reversehelloworld.serviceType }}"
