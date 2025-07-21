@@ -26,11 +26,23 @@ install_docker() {
 }
 
 install_kubectl() {
-  echo "Installing kubectl"
-  curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-  chmod +x kubectl
-  sudo mv kubectl /usr/local/bin/
-  echo "kubectl installed."
+  echo "[STEP] Installing Kubernetes tools (kubeadm, kubelet, kubectl)..."
+  sudo apt-get install -y apt-transport-https
+
+  echo "Adding Kubernetes GPG key"
+  sudo mkdir -p /etc/apt/keyrings
+  curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+    sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-archive-keyring.gpg
+
+  echo "[STEP] Adding Kubernetes repository..."
+  echo "deb [signed-by=/etc/apt/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | \
+    sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+  sudo apt-get update
+  sudo apt-get install -y kubelet kubeadm kubectl
+  sudo apt-mark hold kubelet kubeadm kubectl
+
+  echo "kubeadm, kubelet, kubectl installed"
 }
 
 install_helm() {
@@ -38,6 +50,7 @@ install_helm() {
   curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
   echo "Helm installed."
 }
+
 
 if ! command -v docker &> /dev/null; then
   install_docker
@@ -47,11 +60,34 @@ else
   echo "Docker already installed"
 fi
 
-if ! command -v kubectl &> /dev/null; then
+if ! command -v kubeadm &> /dev/null; then
   install_kubectl
 else
-  echo "kubectl already installed"
+   "[SKIP] Kubernetes tools already installed."
 fi
+
+echo "Checking if cluster is already initialized"
+if [ ! -f /etc/kubernetes/admin.conf ]; then
+  echo "Disabling swap"
+  sudo swapoff -a
+  sudo sed -i '/ swap / s/^/#/' /etc/fstab
+
+  echo "Initializing Kubernetes cluster with kubeadm"
+  sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+
+  echo "Setting up kubeconfig for current user"
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+  echo "Installing Calico CNI"
+  kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+
+  echo "Cluster initialized successfully"
+else
+  echo "Cluster already initialized"
+fi
+
 
 if ! command -v helm &> /dev/null; then
   install_helm
