@@ -10,7 +10,7 @@ helloworld:
   podName: hello-world
   serviceType: ClusterIP
   servicePort: 5000
-  image: dockxam/python-app
+  image: dockxam/python-app:1747905063
   port: 80
   pullPolicy: IfNotPresent
   tag: v2
@@ -26,7 +26,7 @@ reversehelloworld:
   podName: reverse-hello-world
   serviceType: ClusterIP
   servicePort: 8000
-  image: dockxam/reverse-python-app
+  image: dockxam/reverse-python-app:1747905063
   port: 80
   pullPolicy: IfNotPresent
   tag: v4
